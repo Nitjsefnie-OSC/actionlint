@@ -13,3 +13,13 @@ jobs:
       queue: max
     steps:
       - run: echo
+
+  test2:
+    # A wrong value is reported even when cancel-in-progress is absent, and
+    # the job-level section gets the same two rules as the workflow-level one.
+    runs-on: ubuntu-latest
+    concurrency:
+      group: job-bad
+      queue: Max
+    steps:
+      - run: echo

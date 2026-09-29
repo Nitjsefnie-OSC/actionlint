@@ -1,4 +1,7 @@
-on: push
+on:
+  workflow_dispatch:
+    inputs:
+      queue:
 
 concurrency:
   group: deploy-queue
@@ -20,3 +23,13 @@ jobs:
       queue: single
     steps:
       - run: echo "single"
+  test3:
+    # A ${{ }} value is not checked against the literal pair, so neither is the
+    # combination rule: GitHub cannot know the value before the expression runs.
+    runs-on: ubuntu-latest
+    concurrency:
+      group: job-expr
+      cancel-in-progress: true
+      queue: ${{ fromJSON(inputs.queue) }}
+    steps:
+      - run: echo "expression"
